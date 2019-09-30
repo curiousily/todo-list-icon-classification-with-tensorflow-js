@@ -14,7 +14,7 @@ import {
   faBook,
   faEllipsisV
 } from "@fortawesome/free-solid-svg-icons";
-import { predict } from "./suggestions/model";
+import { predict, suggestIcon } from "./suggestions/model";
 
 const NewTask = ({ onSaveTask, model, encoder }) => {
   const [task, setTask] = useState({
@@ -32,7 +32,8 @@ const NewTask = ({ onSaveTask, model, encoder }) => {
       name: e.target.value
     });
     setErrors([]);
-    const prediction = await predict(model, encoder, e.target.value);
+    const newIcon = await suggestIcon(model, encoder, e.target.value);
+    setSuggestedIcon(newIcon);
   };
 
   const handleAcceptSuggestion = () => {
@@ -76,6 +77,7 @@ const NewTask = ({ onSaveTask, model, encoder }) => {
       name: "",
       icon: null
     });
+    setSuggestedIcon(null);
   };
 
   return (

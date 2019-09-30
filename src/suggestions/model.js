@@ -69,17 +69,15 @@ const trainModel = async encoder => {
   return model;
 };
 
-const predict = async (model, encoder, taskName) => {
+const suggestIcon = async (model, encoder, taskName) => {
   if (!taskName.trim().includes(" ")) {
     return;
   }
-  console.log(taskName);
   const xPredict = await encodeData(encoder, [{ text: taskName }]);
 
-  const prediction = model.predict(xPredict);
+  const prediction = model.predict(xPredict).dataSync();
 
-  console.log(prediction.dataSync());
-  return prediction;
+  return prediction[0] > 0.5 ? "BOOK" : "RUN";
 };
 
-export { predict, trainModel };
+export { suggestIcon, trainModel };
