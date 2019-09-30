@@ -9,6 +9,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faRunning,
+  faSpinner,
   faBook,
   faEllipsisV
 } from "@fortawesome/free-solid-svg-icons";
@@ -138,7 +139,9 @@ const NewTask = ({ onSaveTask }) => {
                   <FontAwesomeIcon
                     icon={suggestedIcon === "RUN" ? faRunning : faBook}
                   />
-                ) : null
+                ) : (
+                  <FontAwesomeIcon icon={faSpinner} spin />
+                )
               }
             />
           </div>
