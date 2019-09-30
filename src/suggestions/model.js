@@ -14,7 +14,7 @@ const encodeData = async (encoder, tasks) => {
   return embeddings;
 };
 
-const train = async () => {
+const trainModel = async () => {
   const yTrain = tf.tensor2d(
     trainTasks.map(t => [t.icon === "BOOK" ? 1 : 0, t.icon === "RUN" ? 1 : 0])
   );
@@ -35,7 +35,7 @@ const train = async () => {
 
   model.compile({
     loss: "categoricalCrossentropy",
-    optimizer: tf.train.adam(0.01),
+    optimizer: tf.train.adam(0.001),
     metrics: ["accuracy"]
   });
 
@@ -54,6 +54,8 @@ const train = async () => {
       }
     )
   });
+
+  return model;
 };
 
-export { train };
+export { trainModel };

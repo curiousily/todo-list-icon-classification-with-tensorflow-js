@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { Card } from "react-rainbow-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,6 +7,7 @@ import UUID from "uuidjs";
 import _ from "lodash";
 import Task from "./Task";
 import NewTask from "./NewTask";
+import { trainModel } from "./suggestions/model";
 
 const iconContainerStyles = {
   width: "2.5rem",
@@ -15,6 +16,13 @@ const iconContainerStyles = {
 
 const App = () => {
   const [tasks, setTasks] = useState({});
+
+  useEffect(() => {
+    const loadModel = async () => {
+      const model = await trainModel();
+    };
+    loadModel();
+  }, []);
 
   const handleSaveTask = task => {
     const taskId = UUID.generate();
@@ -55,6 +63,7 @@ const App = () => {
 
   return (
     <div className="rainbow-m-around_x-large">
+      <div id="loss-cont" />
       <Card
         title="The Cute List"
         icon={
