@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-import { Card } from "react-rainbow-components";
+import { Card, Spinner } from "react-rainbow-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTasks } from "@fortawesome/free-solid-svg-icons";
 import UUID from "uuidjs";
@@ -8,6 +8,7 @@ import _ from "lodash";
 import Task from "./Task";
 import NewTask from "./NewTask";
 import { trainModel } from "./suggestions/model";
+import Loader from "./Loader";
 
 const iconContainerStyles = {
   width: "2.5rem",
@@ -16,10 +17,12 @@ const iconContainerStyles = {
 
 const App = () => {
   const [tasks, setTasks] = useState({});
+  const [model, setModel] = useState(null);
 
   useEffect(() => {
     const loadModel = async () => {
-      const model = await trainModel();
+      const trainedModel = await trainModel();
+      setModel(trainedModel);
     };
     loadModel();
   }, []);
@@ -79,21 +82,24 @@ const App = () => {
           </span>
         }
       >
-        <div className="rainbow-p-around_x-large rainbow-align-content_center rainbow-flex_column">
-          <NewTask onSaveTask={handleSaveTask} />
-          {Object.values(tasks).map(t => (
-            <Task
-              key={t.id}
-              id={t.id}
-              name={t.name}
-              icon={t.icon}
-              isComplete={t.isComplete}
-              onComplete={completeTask}
-              onUndo={undoCompleteTask}
-              onRemove={removeTask}
-            />
-          ))}
-        </div>
+        {model === null && <Loader text="Preparing suggestions" />}
+        {model !== null && (
+          <div className="rainbow-p-around_x-large rainbow-align-content_center rainbow-flex_column">
+            <NewTask onSaveTask={handleSaveTask} />
+            {Object.values(tasks).map(t => (
+              <Task
+                key={t.id}
+                id={t.id}
+                name={t.name}
+                icon={t.icon}
+                isComplete={t.isComplete}
+                onComplete={completeTask}
+                onUndo={undoCompleteTask}
+                onRemove={removeTask}
+              />
+            ))}
+          </div>
+        )}
       </Card>
     </div>
   );
