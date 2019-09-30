@@ -6,6 +6,7 @@ import {
   ButtonMenu,
   MenuItem
 } from "react-rainbow-components";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faRunning,
@@ -13,8 +14,9 @@ import {
   faBook,
   faEllipsisV
 } from "@fortawesome/free-solid-svg-icons";
+import { predict } from "./suggestions/model";
 
-const NewTask = ({ onSaveTask }) => {
+const NewTask = ({ onSaveTask, model, encoder }) => {
   const [task, setTask] = useState({
     name: "",
     icon: null
@@ -24,12 +26,13 @@ const NewTask = ({ onSaveTask }) => {
 
   const [suggestedIcon, setSuggestedIcon] = useState(null);
 
-  const handleNameChange = e => {
+  const handleNameChange = async e => {
     setTask({
       ...task,
       name: e.target.value
     });
     setErrors([]);
+    const prediction = await predict(model, encoder, e.target.value);
   };
 
   const handleAcceptSuggestion = () => {

@@ -15,7 +15,7 @@ const encodeData = async (encoder, tasks) => {
   return embeddings;
 };
 
-const trainModel = async () => {
+const trainModel = async encoder => {
   try {
     const loadedModel = await tf.loadLayersModel(
       `localstorage://${MODEL_NAME}`
@@ -29,8 +29,6 @@ const trainModel = async () => {
   const yTrain = tf.tensor2d(
     trainTasks.map(t => [t.icon === "BOOK" ? 1 : 0, t.icon === "RUN" ? 1 : 0])
   );
-
-  const encoder = await use.load();
 
   const xTrain = await encodeData(encoder, trainTasks);
 
@@ -71,4 +69,17 @@ const trainModel = async () => {
   return model;
 };
 
-export { trainModel };
+const predict = async (model, encoder, taskName) => {
+  if (!taskName.trim().includes(" ")) {
+    return;
+  }
+  console.log(taskName);
+  const xPredict = await encodeData(encoder, [{ text: taskName }]);
+
+  const prediction = model.predict(xPredict);
+
+  console.log(prediction.dataSync());
+  return prediction;
+};
+
+export { predict, trainModel };

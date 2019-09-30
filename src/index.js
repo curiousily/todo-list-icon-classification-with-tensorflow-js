@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-import { Card, Spinner } from "react-rainbow-components";
+import { Card } from "react-rainbow-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTasks } from "@fortawesome/free-solid-svg-icons";
+import * as use from "@tensorflow-models/universal-sentence-encoder";
 import UUID from "uuidjs";
 import _ from "lodash";
 import Task from "./Task";
@@ -18,10 +19,13 @@ const iconContainerStyles = {
 const App = () => {
   const [tasks, setTasks] = useState({});
   const [model, setModel] = useState(null);
+  const [encoder, setEncoder] = useState(null);
 
   useEffect(() => {
     const loadModel = async () => {
-      const trainedModel = await trainModel();
+      const sentenceEncoder = await use.load();
+      const trainedModel = await trainModel(sentenceEncoder);
+      setEncoder(sentenceEncoder);
       setModel(trainedModel);
     };
     loadModel();
@@ -85,7 +89,11 @@ const App = () => {
         {model === null && <Loader text="Preparing suggestions" />}
         {model !== null && (
           <div className="rainbow-p-around_x-large rainbow-align-content_center rainbow-flex_column">
-            <NewTask onSaveTask={handleSaveTask} />
+            <NewTask
+              onSaveTask={handleSaveTask}
+              model={model}
+              encoder={encoder}
+            />
             {Object.values(tasks).map(t => (
               <Task
                 key={t.id}
