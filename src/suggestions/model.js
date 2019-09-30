@@ -6,6 +6,7 @@ const exerciseTodos = require("./data/exercise_todos.json");
 
 const trainTasks = learnTodos.concat(exerciseTodos);
 
+const MODEL_NAME = "suggestion-model";
 const N_CLASSES = 2;
 
 const encodeData = async (encoder, tasks) => {
@@ -15,6 +16,16 @@ const encodeData = async (encoder, tasks) => {
 };
 
 const trainModel = async () => {
+  try {
+    const loadedModel = await tf.loadLayersModel(
+      `localstorage://${MODEL_NAME}`
+    );
+    console.log("Using existing model");
+    return loadedModel;
+  } catch (e) {
+    console.log("Training new model");
+  }
+
   const yTrain = tf.tensor2d(
     trainTasks.map(t => [t.icon === "BOOK" ? 1 : 0, t.icon === "RUN" ? 1 : 0])
   );
@@ -54,6 +65,8 @@ const trainModel = async () => {
       }
     )
   });
+
+  await model.save(`localstorage://${MODEL_NAME}`);
 
   return model;
 };
