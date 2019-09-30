@@ -70,7 +70,7 @@ const App = () => {
 
   return (
     <div className="rainbow-m-around_x-large">
-      <div id="loss-cont" />
+      {model === null && <div id="loss-cont" />}
       <Card
         title="The Cute List"
         icon={
