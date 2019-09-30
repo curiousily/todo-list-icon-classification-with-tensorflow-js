@@ -1,6 +1,5 @@
 import * as tf from "@tensorflow/tfjs";
 import * as tfvis from "@tensorflow/tfjs-vis";
-import * as use from "@tensorflow-models/universal-sentence-encoder";
 const learnTodos = require("./data/learn_todos.json");
 const exerciseTodos = require("./data/exercise_todos.json");
 
@@ -69,7 +68,7 @@ const trainModel = async encoder => {
   return model;
 };
 
-const suggestIcon = async (model, encoder, taskName) => {
+const suggestIcon = async (model, encoder, taskName, confidenceThreshold) => {
   if (!taskName.trim().includes(" ")) {
     return;
   }
@@ -77,7 +76,13 @@ const suggestIcon = async (model, encoder, taskName) => {
 
   const prediction = model.predict(xPredict).dataSync();
 
-  return prediction[0] > 0.5 ? "BOOK" : "RUN";
+  if (prediction[0] > confidenceThreshold) {
+    return "BOOK";
+  } else if (prediction[1] > confidenceThreshold) {
+    return "RUN";
+  } else {
+    return null;
+  }
 };
 
 export { suggestIcon, trainModel };

@@ -14,7 +14,9 @@ import {
   faBook,
   faEllipsisV
 } from "@fortawesome/free-solid-svg-icons";
-import { predict, suggestIcon } from "./suggestions/model";
+import { suggestIcon } from "./suggestions/model";
+
+const CONFIDENCE_THRESHOLD = 0.65;
 
 const NewTask = ({ onSaveTask, model, encoder }) => {
   const [task, setTask] = useState({
@@ -26,14 +28,33 @@ const NewTask = ({ onSaveTask, model, encoder }) => {
 
   const [suggestedIcon, setSuggestedIcon] = useState(null);
 
+  const [typeTimeout, setTypeTimeout] = useState(null);
+
   const handleNameChange = async e => {
+    const taskName = e.target.value;
+
     setTask({
       ...task,
-      name: e.target.value
+      name: taskName
     });
+
     setErrors([]);
-    const newIcon = await suggestIcon(model, encoder, e.target.value);
-    setSuggestedIcon(newIcon);
+
+    if (typeTimeout) {
+      clearTimeout(typeTimeout);
+    }
+
+    setTypeTimeout(
+      setTimeout(async () => {
+        const predictedIcon = await suggestIcon(
+          model,
+          encoder,
+          taskName,
+          CONFIDENCE_THRESHOLD
+        );
+        setSuggestedIcon(predictedIcon);
+      }, 500)
+    );
   };
 
   const handleAcceptSuggestion = () => {
