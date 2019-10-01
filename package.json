@@ -1,8 +1,14 @@
 {
   "name": "todo-list-icon-classification-with-tensorflow-js",
   "version": "1.0.0",
-  "description": "",
-  "keywords": [],
+  "description": null,
+  "keywords": [
+    "text-classification",
+    "embedding",
+    "machine-learning",
+    "deep-learning",
+    "tensorflow"
+  ],
   "main": "src/index.js",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "1.2.25",
