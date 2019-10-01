@@ -53,7 +53,7 @@ const NewTask = ({ onSaveTask, model, encoder }) => {
           CONFIDENCE_THRESHOLD
         );
         setSuggestedIcon(predictedIcon);
-      }, 500)
+      }, 400)
     );
   };
 

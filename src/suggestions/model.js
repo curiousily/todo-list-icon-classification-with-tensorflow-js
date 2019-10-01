@@ -74,7 +74,7 @@ const suggestIcon = async (model, encoder, taskName, confidenceThreshold) => {
   }
   const xPredict = await encodeData(encoder, [{ text: taskName }]);
 
-  const prediction = model.predict(xPredict).dataSync();
+  const prediction = await model.predict(xPredict).data();
 
   if (prediction[0] > confidenceThreshold) {
     return "BOOK";
