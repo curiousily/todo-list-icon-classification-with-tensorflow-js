@@ -1,11 +1,11 @@
 {
   "name": "todo-list-icon-classification-with-tensorflow-js",
   "version": "1.0.0",
-  "description": null,
+  "description": "Learn how to create a simple ToDo list app in ReactJS and use TensorFlow.js to suggest icons for your tasks",
   "keywords": [
     "text-classification",
-    "embedding",
     "machine-learning",
+    "react",
     "deep-learning",
     "tensorflow"
   ],
