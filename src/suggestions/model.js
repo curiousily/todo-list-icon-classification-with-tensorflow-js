@@ -25,11 +25,11 @@ const trainModel = async encoder => {
     console.log("Training new model");
   }
 
+  const xTrain = await encodeData(encoder, trainTasks);
+
   const yTrain = tf.tensor2d(
     trainTasks.map(t => [t.icon === "BOOK" ? 1 : 0, t.icon === "RUN" ? 1 : 0])
   );
-
-  const xTrain = await encodeData(encoder, trainTasks);
 
   const model = tf.sequential();
 
