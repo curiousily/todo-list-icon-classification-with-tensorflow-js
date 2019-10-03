@@ -68,17 +68,17 @@ const trainModel = async encoder => {
   return model;
 };
 
-const suggestIcon = async (model, encoder, taskName, confidenceThreshold) => {
+const suggestIcon = async (model, encoder, taskName, threshold) => {
   if (!taskName.trim().includes(" ")) {
-    return;
+    return null;
   }
   const xPredict = await encodeData(encoder, [{ text: taskName }]);
 
   const prediction = await model.predict(xPredict).data();
 
-  if (prediction[0] > confidenceThreshold) {
+  if (prediction[0] > threshold) {
     return "BOOK";
-  } else if (prediction[1] > confidenceThreshold) {
+  } else if (prediction[1] > threshold) {
     return "RUN";
   } else {
     return null;
