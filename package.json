@@ -17,7 +17,7 @@
     "@tensorflow-models/universal-sentence-encoder": "1.2.0",
     "@tensorflow/tfjs": "1.2.9",
     "@tensorflow/tfjs-vis": "1.2.0",
-    "lodash": "4.17.15",
+    "lodash": "4.17.19",
     "react": "16.10.1",
     "react-dom": "16.10.1",
     "react-rainbow-components": "1.5.0",
